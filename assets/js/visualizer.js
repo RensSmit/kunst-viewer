@@ -150,18 +150,20 @@
       }
     }
 
-    function tekenSchilderij() {
-      /*
-       * Werkelijke muurgrootte inschatten:
-       * We nemen aan dat een standaard deur ~210 cm hoog is en
-       * 10% van de canvashoogte inneemt (grove schatting).
-       * Hieruit berekenen we pixels-per-cm.
-       * De gebruiker kan dit bijstellen met de slider.
-       */
-      const PX_PER_CM = (canvas.height * 0.35) / 250;  // 250 cm ≈ plafond hoogte
+    function getSchilderijPx() {
+      if (schilderijData.breedte && schilderijData.hoogte) {
+        const PX_PER_CM = (canvas.height * 0.35) / 250;
+        return {
+          w: schilderijData.breedte * PX_PER_CM * schaal,
+          h: schilderijData.hoogte  * PX_PER_CM * schaal,
+        };
+      }
+      const w = canvas.width * 0.3 * schaal;
+      return { w, h: w * (schilderijImg.naturalHeight / schilderijImg.naturalWidth) };
+    }
 
-      const breedtePx = schilderijData.breedte * PX_PER_CM * schaal;
-      const hoogtePx  = schilderijData.hoogte  * PX_PER_CM * schaal;
+    function tekenSchilderij() {
+      const { w: breedtePx, h: hoogtePx } = getSchilderijPx();
 
       const x = pos.x - breedtePx / 2;
       const y = pos.y - hoogtePx  / 2;
@@ -199,11 +201,9 @@
     }
 
     function isOpSchilderij(cx, cy) {
-      if (!schilderijData) return false;
-      const PX_PER_CM = (canvas.height * 0.35) / 250;
-      const hw = (schilderijData.breedte * PX_PER_CM * schaal) / 2;
-      const hh = (schilderijData.hoogte  * PX_PER_CM * schaal) / 2;
-      return Math.abs(cx - pos.x) <= hw && Math.abs(cy - pos.y) <= hh;
+      if (!schilderijData || !schilderijImg) return false;
+      const { w, h } = getSchilderijPx();
+      return Math.abs(cx - pos.x) <= w / 2 && Math.abs(cy - pos.y) <= h / 2;
     }
 
     canvas.addEventListener('mousedown', e => {

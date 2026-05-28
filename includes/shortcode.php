@@ -23,6 +23,7 @@ function pv_render_widget( int $schilderij_id = 0 ): void {
             <select class="pv-select-schilderij">
                 <option value=""><?php _e( '— selecteer —', 'painting-visualizer' ); ?></option>
             </select>
+            <img class="pv-preview-thumb" src="" alt="" style="display:none; max-width:100%; margin-top:10px; border-radius:4px;">
         </div>
         <?php endif; ?>
 

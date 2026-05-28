@@ -18,7 +18,6 @@
 
     /* DOM-elementen */
     const selectEl      = wrap.querySelector('.pv-select-schilderij');
-    const previewThumb  = wrap.querySelector('.pv-preview-thumb');
     const dropzone      = wrap.querySelector('#pv-dropzone');
     const fileInput     = wrap.querySelector('#pv-file-input');
     const canvasWrap    = wrap.querySelector('.pv-canvas-wrap');
@@ -75,11 +74,6 @@
         .then(data => {
           schilderijData = data;
           if (koopLink) koopLink.href = data.koop_url;
-
-          if (previewThumb && data.afbeelding) {
-            previewThumb.src   = data.afbeelding;
-            previewThumb.style.display = 'block';
-          }
 
           schilderijImg = new Image();
           schilderijImg.onload = () => {
